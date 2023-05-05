@@ -1,0 +1,20 @@
+{
+	"1": {
+		"password": "1",
+		"name": "Ignacio",
+		"lastname": "Huenchumil",
+		"edad": 28,
+		"sex": "Masculino",
+		"wifi-password": "12345",
+		"wifi-state": "1"
+	},
+	"rut2": {
+		"password": "1",
+		"name": "Paula",
+		"lastname": "Ocampo",
+		"edad": 28,
+		"sex": "Femenino",
+		"wifi-password": "54321",
+		"wifi-state": "1"
+	}
+}

@@ -1,0 +1,18 @@
+{
+    "1": {
+        "password": "1",
+        "name": "Ignacio",
+        "lastname": "Huenchumil",
+        "connection": false,
+        "wifi-password": "12345",
+        "wifi-state": "1"
+    },
+    "2": {
+        "password": "2",
+        "name": "Paula",
+        "lastname": "Ocampo",
+        "connection": false,
+        "wifi-password": "12",
+        "wifi-state": "1"
+    }
+}
