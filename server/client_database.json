@@ -3,7 +3,7 @@
         "password": "1",
         "name": "Ignacio",
         "lastname": "Huenchumil",
-        "connection": false,
+        "connection": true,
         "wifi-password": "12345",
         "wifi-state": "1"
     },
@@ -11,7 +11,7 @@
         "password": "2",
         "name": "Paula",
         "lastname": "Ocampo",
-        "connection": false,
+        "connection": true,
         "wifi-password": "12",
         "wifi-state": "1"
     }

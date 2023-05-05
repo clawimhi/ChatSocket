@@ -2,6 +2,7 @@ import socket
 import time
 from tools.reader import read_message
 from tools.sender import send_message
+
 PORT = 6969
 BUFFER_SIZE = 1024
 HEADER= 64
@@ -18,10 +19,10 @@ def start():
     print('Bienvenido al asistente virtual por favor ingrese sus credenciales.')
 
     rut = input('usuario:')
-    send_message(rut, client)
+    send_message(str(rut), client)
 
     password = input('constraseña:')
-    send_message(password, client)
+    send_message(str(password), client)
 
     response = int(read_message(client)) # Informacion or 0
 
