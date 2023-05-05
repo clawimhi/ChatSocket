@@ -80,6 +80,8 @@ def handle_client(conn, addr):
         
     conn.close()
 
+#Cambio en el codigo
+
 def handle_admin(conn, addr):
     print(f'[NUEVA CONEXIÓN EJECUTIVO] {addr} CONECTADO.')
 
