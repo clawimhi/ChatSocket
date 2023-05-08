@@ -1,7 +1,5 @@
 import logging
 
-
-
 FORMATTER = logging.Formatter("[%(asctime)s] %(levelname)s  %(message)s  ",
                               "%Y/%m/%d %H:%M:%S")
 
@@ -14,8 +12,6 @@ def extendable_logger(log_name, file_name,level=logging.INFO):
     
     specified_logger.addHandler(handler) # Se agrega el handler al logger
     return specified_logger
-
-
 
 def search_transaction_log(file_log, transaction_id):
     f = open(file_log, 'r')

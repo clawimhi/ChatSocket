@@ -2,6 +2,7 @@ import socket
 import time
 from tools.reader import read_message
 from tools.sender import send_message
+
 PORT = 6969
 BUFFER_SIZE = 1024
 HEADER= 64
@@ -13,15 +14,13 @@ client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 client.connect((HOST, PORT))
 
 def start():
-
     send_message('cliente', client)
     print('Bienvenido al asistente virtual por favor ingrese sus credenciales.')
 
     rut = input('usuario:')
-    send_message(rut, client)
-
+    send_message(str(rut), client)
     password = input('constraseña:')
-    send_message(password, client)
+    send_message(str(password), client)
 
     response = int(read_message(client)) # Informacion or 0
 
@@ -64,7 +63,21 @@ def start():
             print(f'Asistente: Clave actualizada.')
 
         elif request == '3':
-            print(f'Asistente: Estimado cliente, se ha contactado a un ejecutivo.')
+            send_message(request, client)
+            print(f'Asistente: Estimado cliente, actualmente hay {read_message(client)} ejecutivos disponibles.')
+            msg_rec = read_message(client)
+            print(f'Asistente: Su lugar en la fila de espera es {msg_rec}. Tiempo estimado de espera: {2*msg_rec} minutos. Por favor esperar a que un \
+                  ejecutivo atienda la solicitud.')
+            
+            assigned = int(read_message(client)) # Mensaje del ejecutivo asignado.
+            rut_exec = read_message(client)
+            send_message(rut_exec, client)
+            while assigned:
+                msg_executive = read_message(client) # Mensaje del ejecutivo.
+                print(f'Ejecutivo: {msg_executive}')
+
+                msg_client = input('Cliente: ')
+                send_message(msg_client, client)
 
         elif request == '4':
             send_message(input('Asistente: Presionar espacio para terminar la conexión'), client)

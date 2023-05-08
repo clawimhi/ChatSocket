@@ -1,0 +1,30 @@
+{
+    "1": {
+        "password": "1",
+        "name": "Ignacio",
+        "lastname": "Huenchumil",
+        "connection": false,
+        "available": true
+    },
+    "2": {
+        "password": "2",
+        "name": "Ignacio",
+        "lastname": "Huenchumil",
+        "connection": false,
+        "available": false
+    },
+    "3": {
+        "password": "3",
+        "name": "Ignacio",
+        "lastname": "Huenchumil",
+        "connection": false,
+        "available": true
+    },
+    "4": {
+        "password": "4",
+        "name": "Ignacio",
+        "lastname": "Huenchumil",
+        "connection": false,
+        "available": true
+    }
+}
