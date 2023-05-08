@@ -9,8 +9,8 @@ from tools.logger import extendable_logger
 from tools.managment_json import last_request_client
 from functools import partial, partialmethod
 
-HOST = '127.0.0.1'
 PORT = 6969
+HOST = '127.0.0.1'
 LISTEN_QUEUE = 10
 BUFFER_SIZE = 1024
 HEADER= 64
@@ -28,6 +28,11 @@ logging.Logger.trace = partialmethod(logging.Logger.log, logging.TRACE)
 logging.trace = partial(logging.log, logging.TRACE)
 
 DBCLIENT= read_json(CLIENT_DB)
+DBEXECUTIVE = read_json(EXECUTIVE_DB)
+
+executive_info = {}
+queue_client = []
+
 active_client = 0 
 def handle_client(conn, addr):
     print(f'[PETICION DE CONEXION] {addr}.')
@@ -44,8 +49,9 @@ def handle_client(conn, addr):
         elif password == DBCLIENT[rut]['password'] and not DBCLIENT[rut]['connection']:
             send_message('1', conn)
             send_message(DBCLIENT[rut]['name'], conn)
-            DBCLIENT[rut]['connection'] = True #Cambiar a True
+            DBCLIENT[rut]['connection'] = True
             write_json(CLIENT_DB, DBCLIENT)
+
             transaction_number = transaction_number_generator()
             print(f'[CONEXIÓN] Cliente {DBCLIENT[rut]["name"]} {DBCLIENT[rut]["lastname"]} conectado.')
             logger = extendable_logger(str(rut), f'server/logs/{rut}.log', level= logging.TRACE)
@@ -79,21 +85,54 @@ def handle_client(conn, addr):
             
             logger.trace(f'N2 - [CONTRASENA CAMBIADA] ({transaction_number}) cambio de contrasena exitoso.')
         
+        if msg == '3': # Contactarse con un ejecutivo.
+            connected_executive = [key for key, user in DBEXECUTIVE.items() if user['connection']]
+            queue_client.append((rut, conn))
+            send_message(str(len(connected_executive)), conn)
+            send_message(str(len(queue_client)), conn)
+
+            rut_exec = read_message(conn)
+            con_exec = executive_info[rut_exec]
+            while True:
+                msg = read_message(conn) # Se lee mensaje del cliente
+                send_message(msg, con_exec) # Se envía mensaje al ejecutivo
+                
+     
+
     conn.close()
 
 def handle_admin(conn, addr):
     print(f'[NUEVA CONEXIÓN EJECUTIVO] {addr} CONECTADO.')
     connect = True
+
     # Se autentica al ejecutivo
     rut = read_message(conn)
     password = read_message(conn)
-    send_message('1', conn) # Se envía un mensaje para que el cliente sepa que se autenticó correctamente
+
+    if rut in DBEXECUTIVE.keys():
+        if DBEXECUTIVE[rut]['connection']:
+            send_message('0', conn)
+            connect = False
+
+        elif password == DBEXECUTIVE[rut]['password'] and not DBEXECUTIVE[rut]['connection']:
+            send_message('1', conn)
+            send_message(DBEXECUTIVE[rut]['name'], conn)
+            DBEXECUTIVE[rut]['connection'] = True
+            write_json(EXECUTIVE_DB, DBEXECUTIVE)
+            executive_info[rut] = conn
+            print(f'[CONEXIÓN] Ejecutivo {DBEXECUTIVE[rut]["name"]} conectado.')
+
+        else:
+            send_message('0', conn)
+            connect = False
+
+    # se comienza a escuchar al ejecutivo
     while connect:
         msg = read_message(conn)
         if msg == 'STATUS':
             active_client = sum([1 for user in DBCLIENT.values() if user['connection']]) # Se actualiza la cantidad de clientes conectados
-            send_message( str(active_client), conn)
-            
+            send_message(str(active_client), conn)
+    
         if msg == 'DETAILS':
             latest_action = {}
             rut_connected_client = [key for key, user in DBCLIENT.items() if user['connection']]
@@ -106,6 +145,21 @@ def handle_admin(conn, addr):
             for rut, action in latest_action.items():
                 send_message(rut, conn)
                 send_message(action, conn)
+                
+        if msg == 'CONNECT':
+            if len(queue_client):
+                rut_client, conn_client = queue_client.pop(0)
+            send_message('1', conn_client)
+            send_message(str(rut),conn_client)
+            send_message('hola', conn_client)
+            while True:
+                response = read_message(conn) # Se lee mensaje del ejecutivo
+                if response == 'STATUS':
+                    active_client = sum([1 for user in DBCLIENT.values() if user['connection']]) # Se actualiza la cantidad de clientes conectados
+                    send_message(str(active_client), conn)
+                else:
+                    send_message(response, conn_client) # Se envía al cliente
+
     conn.close()
 
 def start():
@@ -124,4 +178,3 @@ def start():
                 conn.send('Tipo de usuario no válido. Cierre de conexión'.encode(FORMAT))
                 conn.close()
         print(f'[CONEXIONES ACTIVAS] {threading.active_count() - 1}')   # Se resta 1 porque el hilo principal es el que cuenta las conexiones
-start()

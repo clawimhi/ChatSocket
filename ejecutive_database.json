@@ -3,7 +3,7 @@
 		"password": "",
 		"name": "",
 		"lastname": "",
-		"edad": ,
+		"edad":"" ,
 		"sex": "",
 		"wifi-password": "",
 		"wifi-state": ""

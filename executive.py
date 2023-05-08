@@ -1,21 +1,17 @@
 import socket 
 from tools.sender import send_message
 from tools.reader import read_message
-
+from tools.operation_executive import status, details, command_executive, connect_w
+import threading
 PORT = 6969
 BUFFER_SIZE = 1024
 HEADER= 64
 HOST = '127.0.0.1'
 FORMAT = 'utf-8'
-DISCONNET_MESSAGE = '!DISCONNECT'
+DISCONNECT_MESSAGE = '!DISCONNECT'
 
 executive = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 executive.connect((HOST, PORT))
-
-def status():
-    send_message('STATUS', executive)
-    response = read_message(executive)
-    return response
 
 def details():
     send_message('DETAILS', executive)
@@ -41,26 +37,27 @@ def start():
     send_message(password, executive)
 
     response = int(read_message(executive)) # Se recibe un 1 si la información es correcta o un 0 si no lo es.
+
     if response == 1:
-        # name = read_message(executive) #entrego el nombre del ejecutivo
-        name = 'Ignacio' # Temporal
+        name = read_message(executive) # Nombre del ejecutivo
         print(f'Hola {name}, en estos momentos hay:')
-        print(f'{status()} clientes conectados.')
+        num_connection = status(executive)
+        print(f'{num_connection} clientes conectados.')
         print('comandos permitidos :\n\n [:status, :details, :history, :info, :restart internet, :restart wifi, :connect, :close]\n')
 
+    while response: # se mantiene la conexión solo si la información es correcta.
+        request = input(f'[EJECUTIVO {name.upper()}]: ')
+        if len(request):
+            if request[0] == ':':
+                request = request.split(' ')[0]
+                command_executive(executive, request[1:], name)
+                if request[1:] == 'connect':  
+                    connect_w(executive, name)
 
-    while response: #Se mantiene la conexión solo si la información es correcta.
-        request = input(f'{name}: ')
-        if request == ':status':
-            print(f'\n{status()} clientes conectados.\n')
-            print('------------------------------------------------------------------------------------')
-        elif request == ':details':
-            dicc_response = details()
-            for key, value in dicc_response.items():
-                print(f'usuario {key}  - {value}')
-        elif request == ':history':
-            pass
-        else:
-            print('comando invalido. Intente nuevamente.')
+            elif request == DISCONNECT_MESSAGE:
+                input('Asistente: Presionar espacio para terminar la conexión')
+                send_message(DISCONNECT_MESSAGE, executive)
+                break
+    
 start()
     
