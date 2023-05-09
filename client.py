@@ -26,8 +26,8 @@ def start():
 
     if response == 1:
         client_name = read_message(client)
-    while response:
         
+    while response:
         print(f'\nAsistente: Hola {client_name}, en qué te podemos ayudar?.')
 
         print('     (1) Reiniciar Servicio Internet.')
@@ -64,9 +64,10 @@ def start():
 
         elif request == '3':
             send_message(request, client)
-            print(f'Asistente: Estimado cliente, actualmente hay {read_message(client)} ejecutivos disponibles.')
+            response = read_message(client)
+            print(f'Asistente: Estimado cliente, actualmente hay {response} ejecutivos disponibles.')
             msg_rec = read_message(client)
-            print(f'Asistente: Su lugar en la fila de espera es {msg_rec}. Tiempo estimado de espera: {2*msg_rec} minutos. Por favor esperar a que un \
+            print(f'Asistente: Su lugar en la fila de espera es {msg_rec}. Tiempo estimado de espera: {msg_rec*4} minutos. Por favor esperar a que un \
                   ejecutivo atienda la solicitud.')
             
             assigned = int(read_message(client)) # Mensaje del ejecutivo asignado.
@@ -74,11 +75,16 @@ def start():
             send_message(rut_exec, client)
             while assigned:
                 msg_executive = read_message(client) # Mensaje del ejecutivo.
+                if msg_executive== DISCONNET_MESSAGE:
+                    send_message('0', client)
+                    print(f'Asistente: Estimado cliente, se ha cerrado la sesión.')
+                    print('-------------------------------------------------------')
+                    break
                 print(f'Ejecutivo: {msg_executive}')
 
                 msg_client = input('Cliente: ')
                 send_message(msg_client, client)
-
+               
         elif request == '4':
             send_message(input('Asistente: Presionar espacio para terminar la conexión'), client)
             send_message(DISCONNET_MESSAGE, client)

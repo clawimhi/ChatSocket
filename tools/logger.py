@@ -4,6 +4,9 @@ FORMATTER = logging.Formatter("[%(asctime)s] %(levelname)s  %(message)s  ",
                               "%Y/%m/%d %H:%M:%S")
 
 def extendable_logger(log_name, file_name,level=logging.INFO):
+    """
+    Esta función crea un logger con el nombre del cliente y lo guarda en un archivo de log.
+    """
     handler = logging.FileHandler(file_name) # Se crea un handler para el archivo de log. Si no existe, se crea uno nuevo.
     handler.setFormatter(FORMATTER) # Se le da formato al handler
 

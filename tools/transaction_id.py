@@ -10,3 +10,12 @@ def transaction_number_generator():
             TRANSACTION_NUMBER.append(transaction_number)
             break
     return transaction_number
+
+# Se busca información en el archivo .log por el id de transacción
+def search_transaction(path_log, transaction_number):
+    result = []
+    with open(path_log, 'r') as file:
+        for line in file:
+            if transaction_number in line:
+                result.append(line)
+    return result

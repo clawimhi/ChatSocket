@@ -1,5 +1,5 @@
 from tools.managment_json import read_json, write_json
-import server
+
 import time
 
 def main():
@@ -14,7 +14,6 @@ def main():
     write_json('server/client_database.json', client_dababase)
     write_json('server/executive_database.json', executive_database)
     time.sleep(1)
-    server.start()
-    
-if __name__ == '__main__':
-    main()
+
+# if __name__ == '__main__':
+#     main()
