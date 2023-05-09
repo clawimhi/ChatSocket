@@ -4,8 +4,9 @@
         "name": "Ignacio",
         "lastname": "Huenchumil",
         "connection": false,
-        "wifi-password": "12345",
-        "wifi-state": "1"
+        "wifi-password": "1",
+        "wifi-state": "1",
+        "last_transaction": "9192881126"
     },
     "2": {
         "password": "2",
@@ -13,7 +14,8 @@
         "lastname": "Ocampo",
         "connection": false,
         "wifi-password": "12",
-        "wifi-state": "1"
+        "wifi-state": "1",
+        "last_transaction": "6112191687"
     },
     "3": {
         "password": "3",
@@ -21,30 +23,16 @@
         "lastname": "Gonzalez",
         "connection": false,
         "wifi-password": "123",
-        "wifi-state": "1"
+        "wifi-state": "1",
+        "last_transaction": 1
     },
     "4": {
         "password": "4",
         "name": "Juan",
         "lastname": "Perez",
-        "connection": false,
+        "connection": true,
         "wifi-password": "1244",
-        "wifi-state": "1"
-    },
-    "5": {
-        "password": "5",
-        "name": "Pedro",
-        "lastname": "Gonzalez",
-        "connection": false,
-        "wifi-password": "12345",
-        "wifi-state": "1"
-    },
-    "6": {
-        "password": "6",
-        "name": "Jose",
-        "lastname": "Gonzalez",
-        "connection": false,
-        "wifi-password": "12345",
-        "wifi-state": "1"
+        "wifi-state": "1",
+        "last_transaction": "1835668024"
     }
 }

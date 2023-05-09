@@ -58,6 +58,5 @@ def start():
                 input('Asistente: Presionar espacio para terminar la conexión')
                 send_message(DISCONNECT_MESSAGE, executive)
                 break
-    
 start()
     
