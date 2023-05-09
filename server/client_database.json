@@ -3,10 +3,10 @@
         "password": "1",
         "name": "Ignacio",
         "lastname": "Huenchumil",
-        "connection": false,
+        "connection": true,
         "wifi-password": "1",
         "wifi-state": "1",
-        "last_transaction": "9192881126"
+        "last_transaction": "9176913713"
     },
     "2": {
         "password": "2",
@@ -15,7 +15,7 @@
         "connection": false,
         "wifi-password": "12",
         "wifi-state": "1",
-        "last_transaction": "6112191687"
+        "last_transaction": "2760048345"
     },
     "3": {
         "password": "3",
@@ -30,9 +30,9 @@
         "password": "4",
         "name": "Juan",
         "lastname": "Perez",
-        "connection": true,
+        "connection": false,
         "wifi-password": "1244",
         "wifi-state": "1",
-        "last_transaction": "1835668024"
+        "last_transaction": "9450821489"
     }
 }
