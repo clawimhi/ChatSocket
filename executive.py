@@ -3,11 +3,14 @@ from tools.sender import send_message
 from tools.reader import read_message
 from tools.operation_executive import status, details, command_executive, connect_w
 import threading
-PORT = 6969
 BUFFER_SIZE = 1024
 HEADER= 64
-HOST = '127.0.0.1'
-FORMAT = 'utf-8'
+# PORT = 6969
+# HOST = '127.0.0.1'
+
+HOST = '192.168.132.104'
+PORT = 8050
+
 DISCONNECT_MESSAGE = '!DISCONNECT'
 
 executive = socket.socket(socket.AF_INET, socket.SOCK_STREAM)

@@ -3,14 +3,14 @@
         "password": "1",
         "name": "Ignacio",
         "lastname": "Huenchumil",
-        "connection": true,
+        "connection": false,
         "available": true
     },
     "2": {
         "password": "2",
         "name": "Ignacio",
         "lastname": "Huenchumil",
-        "connection": false,
+        "connection": true,
         "available": true
     },
     "3": {

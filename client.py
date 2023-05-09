@@ -3,10 +3,10 @@ import time
 from tools.reader import read_message
 from tools.sender import send_message
 
-PORT = 6969
+PORT = 8050
 BUFFER_SIZE = 1024
 HEADER= 64
-HOST = '127.0.0.1'
+HOST = '192.168.132.104'
 FORMAT = 'utf-8'
 DISCONNET_MESSAGE = '!DISCONNECT'
 
@@ -26,7 +26,7 @@ def start():
 
     if response == 1:
         client_name = read_message(client)
-        
+
     while response:
         print(f'\nAsistente: Hola {client_name}, en qué te podemos ayudar?.')
 
@@ -73,13 +73,20 @@ def start():
             assigned = int(read_message(client)) # Mensaje del ejecutivo asignado.
             rut_exec = read_message(client)
             send_message(rut_exec, client)
+            print('\n-----------------------------------------------------------\n')
             while assigned:
-                msg_executive = read_message(client) # Mensaje del ejecutivo.
+                msg_executive = read_message(client) # Mensaje de entrada
+                if len(msg_executive.split(' ')) > 1:
+                    msg_servidor = msg_executive.split(' ')[0] + ' ' + msg_executive.split(' ')[1]
+                    if msg_servidor == '[AVISO SERVIDOR]':
+                        print(f'{msg_executive}')
+                        continue
                 if msg_executive== DISCONNET_MESSAGE:
                     send_message('0', client)
                     print(f'Asistente: Estimado cliente, se ha cerrado la sesión.')
                     print('-------------------------------------------------------')
                     break
+
                 print(f'Ejecutivo: {msg_executive}')
 
                 msg_client = input('Cliente: ')

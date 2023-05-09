@@ -10,6 +10,7 @@ from tools.managment_json import last_request_client
 from functools import partial, partialmethod
 import main
 from tools.transaction_id import search_transaction
+import time
 
 PORT = 6969
 HOST = '127.0.0.1'
@@ -193,6 +194,11 @@ def handle_admin(conn, addr):
                         message_info = read_message(conn)
                         rut_info = read_message(conn)
                         client_log[rut_info].info(f'N2 - [INFORMACION HISTORIAL] ({client_transaction}) ' + message_info)
+
+                    elif response == 'RESTART INTERNET':
+                        time.sleep(2)
+                        send_message('[AVISO SERVIDOR] Se ha reiniciado el internet.', conn_client)
+                        send_message('[AVISO SERVIDOR] Se ha reiniciado el internet.', conn)
 
                     elif response == '!DISCONNECT':
                         print(f'[DESCONEXIÓN] Ejecutivo {DBEXECUTIVE[rut]["name"]} se ha desconectado del cliente {DBCLIENT[rut_client]["name"]} {DBCLIENT[rut_client]["lastname"]}.')
