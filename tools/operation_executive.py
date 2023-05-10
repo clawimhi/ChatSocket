@@ -42,6 +42,10 @@ def restart_internet(conn):
     response = read_message(conn)
     print(f'{response}')
    
+def restart_wifi(conn):
+    send_message('RESTART WIFI', conn)
+    response = read_message(conn)
+    print(f'{response}')
 def command_executive(conn, request, name, rut_client = None):
     if request == 'status':
         print(f'\n{status(conn)} clientes conectados.\n')
@@ -75,7 +79,10 @@ def command_executive(conn, request, name, rut_client = None):
         else:
             restart_internet(conn)
     elif request == 'restart wifi':
-        pass
+        if not rut_client:
+            print('No se ha abierto una conexión con un cliente. No es posible realizar esta acción.')
+        else:
+            restart_wifi(conn)
 
 
 def connect_w(conn, name):

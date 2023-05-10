@@ -1,29 +1,36 @@
 {
-    "1": {
-        "password": "1",
-        "name": "Ignacio",
-        "lastname": "Huenchumil",
+    "admin": {
+        "password": "password",
+        "name": "Camilo",
+        "lastname": "Fredes",
         "connection": false,
         "available": true
     },
-    "2": {
-        "password": "2",
-        "name": "Ignacio",
-        "lastname": "Huenchumil",
-        "connection": true,
-        "available": true
-    },
-    "3": {
-        "password": "3",
-        "name": "Ignacio",
-        "lastname": "Huenchumil",
+    "222222222": {
+        "password": "22222222",
+        "name": "Camilo",
+        "lastname": "Fredes",
         "connection": false,
         "available": true
     },
-    "4": {
-        "password": "4",
-        "name": "Ignacio",
-        "lastname": "Huenchumil",
+    "111111111": {
+        "password": "11111111",
+        "name": "Gonzalo",
+        "lastname": "Maureira",
+        "connection": false,
+        "available": true
+    },
+    "123456789": {
+        "password": "12345678",
+        "name": "Jorge",
+        "lastname": "Sandoval",
+        "connection": false,
+        "available": true
+    },
+    "207777778": {
+        "password": "20777777",
+        "name": "Cesar",
+        "lastname": "Azurdia",
         "connection": false,
         "available": true
     }
