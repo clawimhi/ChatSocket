@@ -5,11 +5,9 @@ from tools.operation_executive import status, details, command_executive, connec
 import threading
 BUFFER_SIZE = 1024
 HEADER= 64
-# PORT = 6969
-# HOST = '127.0.0.1'
+PORT = 6969
+HOST = '127.0.0.1'
 
-HOST = '192.168.132.104'
-PORT = 8050
 
 DISCONNECT_MESSAGE = '!DISCONNECT'
 
@@ -28,12 +26,10 @@ def details():
 
     return response
 
-def history():
-    pass
 
 def start():
     send_message('ejecutivo', executive)
-    print('Asistente: Hola! Bienvenido, Ingrese su RUT y Clave para continuar.')
+    print('\nAsistente: Hola! Bienvenido, Ingrese su RUT y Clave para continuar.')
     rut = input('RUT: ')
     send_message(rut, executive)
     password = input('Clave: ')
@@ -43,13 +39,15 @@ def start():
 
     if response == 1:
         name = read_message(executive) # Nombre del ejecutivo
-        print(f'Hola {name}, en estos momentos hay:')
+        print(f'\nHola {name}, en estos momentos hay:')
         num_connection = status(executive)
-        print(f'{num_connection} clientes conectados.')
-        print('comandos permitidos :\n\n [:status, :details, :history, :info, :restart internet, :restart wifi, :connect, :close]\n')
-
+        print(f'    {num_connection} clientes conectados.')
+        print('Comandos permitidos :\n [:status, :details, :history, :info, :restart internet, :restart wifi, :connect, :close]\n')
+    else:
+        print(f'Asistente: Usuario o contraseña incorrectos. La conexión fue cerrada.')
     while response: # se mantiene la conexión solo si la información es correcta.
-        request = input(f'[EJECUTIVO {name.upper()}]: ')
+
+        request = input(f'\n[EJECUTIVO {name.upper()}]: ')
         if len(request):
             if request[0] == ':':
                 request = request.split(' ')[0]

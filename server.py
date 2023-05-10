@@ -39,7 +39,6 @@ client_log = {}
 
 active_client = 0 
 def handle_client(conn, addr):
-    print(f'[PETICION DE CONEXION] {addr}.')
     connect = True
 
     rut = read_message(conn)
@@ -104,13 +103,23 @@ def handle_client(conn, addr):
             con_exec = executive_info[rut_exec]
             while True:
                 msg = read_message(conn) # Se lee mensaje del cliente
+                if msg == 'new_password':
+                    new_password = read_message(conn)
+                    DBCLIENT[rut]['wifi-password'] = new_password
+                    write_json(CLIENT_DB, DBCLIENT)        
+                    print(f'[CONTRASEÑA CAMBIADA] Cliente {DBCLIENT[rut]["name"]} {DBCLIENT[rut]["lastname"]} cambió su contraseña.')
+                    send_message('[AVISO SERVIDOR] Se ha reiniciado el internet.', conn)
+                    send_message('[AVISO SERVIDOR] Se ha reiniciado el internet.', con_exec)
+                    logger.trace(f'N2 - [CONTRASENA CAMBIADA] ({transaction_number}) cambio de contrasena exitoso.')
+                    continue
                 if msg == '0': # Si el cliente se desconecta
                     break
                 send_message(msg, con_exec) # Se envía mensaje al ejecutivo
+
     conn.close()
 
 def handle_admin(conn, addr):
-    print(f'[NUEVA CONEXIÓN EJECUTIVO] {addr} CONECTADO.')
+
     connect = True
 
     # Se autentica al ejecutivo
@@ -133,11 +142,21 @@ def handle_admin(conn, addr):
         else:
             send_message('0', conn)
             connect = False
-
+    else:
+        send_message('0', conn)
+        connect = False
     # se comienza a escuchar al ejecutivo
+
     while connect:
         client_transaction = 0
         msg = read_message(conn)
+
+        if msg == DISCONNET_MESSAGE:
+            print(f'[DESCONEXIÓN] Ejecutivo {DBEXECUTIVE[rut]["name"]} {DBEXECUTIVE[rut]["lastname"]} desconectado.')
+            DBEXECUTIVE[rut]['connection'] = False
+            write_json(CLIENT_DB, DBCLIENT)
+            connect = False  
+            
         if msg == 'STATUS':
             active_client = sum([1 for user in DBCLIENT.values() if user['connection']]) # Se actualiza la cantidad de clientes conectados
             send_message(str(active_client), conn)
@@ -200,6 +219,12 @@ def handle_admin(conn, addr):
                         send_message('[AVISO SERVIDOR] Se ha reiniciado el internet.', conn_client)
                         send_message('[AVISO SERVIDOR] Se ha reiniciado el internet.', conn)
 
+                    elif response == 'RESTART WIFI':
+                        time.sleep(2)
+                        send_message('2', conn_client)
+
+                        
+                        
                     elif response == '!DISCONNECT':
                         print(f'[DESCONEXIÓN] Ejecutivo {DBEXECUTIVE[rut]["name"]} se ha desconectado del cliente {DBCLIENT[rut_client]["name"]} {DBCLIENT[rut_client]["lastname"]}.')
                         client_transaction = 0
@@ -209,13 +234,12 @@ def handle_admin(conn, addr):
                         break
                     else:
                         send_message(response, conn_client) # Se envía al cliente
-
     conn.close()
 
 def start():
-    print(f'[INICIANDO] Servidor iniciado en {HOST}:{PORT}.')
+    print(f'\n[INICIANDO] Servidor iniciado en el puerto {PORT}.')
     server.listen(LISTEN_QUEUE)
-    print(f'[ESCUCHANDO] Servidor escuchando...')
+    print(f'[ESCUCHANDO] Servidor esperando conexiones...')
     while True:
         conn, addr = server.accept() # 'conn' socket para comunicarse con el cliente, 'addr' es la dirección del cliente
         usertype = read_message(conn)
@@ -223,9 +247,5 @@ def start():
             if usertype == 'cliente':
                 thread = threading.Thread(target=handle_client, args=(conn, addr)).start()
             elif usertype == 'ejecutivo':
-                thread = threading.Thread(target=handle_admin, args=(conn, addr)).start()
-            else:
-                conn.send('Tipo de usuario no válido. Cierre de conexión'.encode(FORMAT))
-                conn.close()
-        print(f'[CONEXIONES ACTIVAS] {threading.active_count() - 1}')   # Se resta 1 porque el hilo principal es el que cuenta las conexiones
+                    thread = threading.Thread(target=handle_admin, args=(conn, addr)).start()
 start()
